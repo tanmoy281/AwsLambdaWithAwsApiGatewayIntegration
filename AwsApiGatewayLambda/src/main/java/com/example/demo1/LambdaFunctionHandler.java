@@ -1,5 +1,6 @@
 package com.example.demo1;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.amazonaws.services.lambda.runtime.Context;
@@ -25,9 +26,14 @@ public class LambdaFunctionHandler
 		dto.setName("Tanmoyy");
 		dto.setAddress("Testing my address");
 
+		/*to fix cors issue with browser*/
+		Map<String, String> responseheaders = new HashMap<>();
+		responseheaders.put("Content-Type", "application/json");
+		responseheaders.put("Access-Control-Allow-Origin", "*");
+		
 		ObjectMapper objMapper = new ObjectMapper();
 		APIGatewayProxyResponseEvent responseEvent = new APIGatewayProxyResponseEvent();
-
+		responseEvent.setHeaders(responseheaders);
 		try {
 			responseEvent.setBody(objMapper.writeValueAsString(dto));
 		} catch (JsonProcessingException e) {
